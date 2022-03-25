@@ -96,12 +96,12 @@ contract Staking is AccessControl {
         rewardRate = _rewardRate;
     }
 
-    function setRewardFreezePeriod(uint _rewardFreezePeriodMin) external onlyRole(ADMIN_ROLE) {
-        rewardFreezePeriod = _rewardFreezePeriodMin * 1 minutes;
+    function setRewardFreezePeriod(uint _rewardFreezePeriod) external onlyRole(ADMIN_ROLE) {
+        rewardFreezePeriod = _rewardFreezePeriod;
     }
 
-    function setUnstakeFreezePeriod(uint _unstakeFreezePeriodMin) external onlyRole(ADMIN_ROLE) {
-        unstakeFreezePeriod = _unstakeFreezePeriodMin * 1 minutes;
+    function setUnstakeFreezePeriod(uint _unstakeFreezePeriod) external onlyRole(ADMIN_ROLE) {
+        unstakeFreezePeriod = _unstakeFreezePeriod;
     }
 
     function stakeBalanceOfSender() external view returns (StakeData memory) {

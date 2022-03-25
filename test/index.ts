@@ -221,17 +221,17 @@ describe("Staking", () => {
   });
 
   it("Should update reward freeze period", async () => {
-    const newRewardFreezePeriod = 20; // 20 min
+    const newRewardFreezePeriod = 20 * 60; // 20 min
 
     await stakingContract.setRewardFreezePeriod(newRewardFreezePeriod);
-    expect(await stakingContract.rewardFreezePeriod()).to.equal(newRewardFreezePeriod * 60);
+    expect(await stakingContract.rewardFreezePeriod()).to.equal(newRewardFreezePeriod);
   });
 
   it("Should update reward freeze period", async () => {
-    const newUnstakeFreezePeriod = 30; // 30 min
+    const newUnstakeFreezePeriod = 30 * 60; // 30 min
 
     await stakingContract.setUnstakeFreezePeriod(newUnstakeFreezePeriod);
-    expect(await stakingContract.unstakeFreezePeriod()).to.equal(newUnstakeFreezePeriod * 60);
+    expect(await stakingContract.unstakeFreezePeriod()).to.equal(newUnstakeFreezePeriod);
   });
 
 });
