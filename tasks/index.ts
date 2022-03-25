@@ -1,4 +1,4 @@
 import "./accounts";
-// import "./stake";
-// import "./unstake";
-// import "./claim";
+import "./stake";
+import "./unstake";
+import "./claim";

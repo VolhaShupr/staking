@@ -48,7 +48,7 @@ contract Staking is AccessControl {
     function stake(uint amount) external validAmount(amount) {
         StakeData storage userStake = _balances[msg.sender];
 
-        if (passedTime(userStake.lastStakeDate) > rewardFreezePeriod) {
+        if (isFreezePeriodPassed(userStake.lastStakeDate, rewardFreezePeriod)) {
             userStake.availableReward += userStake.frozenReward;
             userStake.frozenReward = 0;
         }
@@ -65,7 +65,7 @@ contract Staking is AccessControl {
     function unstake(uint amount) external validAmount(amount){
         StakeData storage userStake = _balances[msg.sender];
 
-        require(passedTime(userStake.lastStakeDate) > unstakeFreezePeriod, "No available tokens to unstake");
+        require(isFreezePeriodPassed(userStake.lastStakeDate, unstakeFreezePeriod), "No available tokens to unstake");
         require(amount <= userStake.staked, "Insufficient amount to unstake");
         unchecked {
             userStake.staked -= amount;
@@ -81,7 +81,7 @@ contract Staking is AccessControl {
         uint reward = userStake.availableReward;
         userStake.availableReward = 0;
 
-        if (passedTime(userStake.lastStakeDate) > rewardFreezePeriod) {
+        if (isFreezePeriodPassed(userStake.lastStakeDate, rewardFreezePeriod)) {
             reward += userStake.frozenReward;
             userStake.frozenReward = 0;
         }
@@ -104,12 +104,12 @@ contract Staking is AccessControl {
         unstakeFreezePeriod = _unstakeFreezePeriod;
     }
 
-    function stakeBalanceOfSender() external view returns (StakeData memory) {
+    function snapshotOfSenderStake() external view returns (StakeData memory) {
         return _balances[msg.sender];
     }
 
-    function passedTime(uint timestamp) private view returns (uint) {
-        return block.timestamp - timestamp;
+    function isFreezePeriodPassed(uint timestamp, uint period) private view returns (bool) {
+        return (block.timestamp - timestamp) > period;
     }
 
 
