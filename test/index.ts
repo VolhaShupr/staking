@@ -31,9 +31,7 @@ describe("Staking", () => {
   let stakingContract: Contract,
     stakingToken: Contract,
     rewardToken: Contract,
-    owner: SignerWithAddress,
-    delegate: SignerWithAddress,
-    account1: SignerWithAddress;
+    owner: SignerWithAddress;
 
   let actualStake: Stake = {
     lastStakeDate: new Date().getTime(), // field is not in use in tests
@@ -45,7 +43,7 @@ describe("Staking", () => {
   let clean: any; // snapshot
 
   before(async () => {
-    [owner, delegate, account1] = await ethers.getSigners();
+    [owner] = await ethers.getSigners();
 
     const tokenContractFactory = await ethers.getContractFactory("Token");
     stakingToken = await tokenContractFactory.deploy("LP Token", "LPT", tokenInitialSupply);
@@ -77,7 +75,7 @@ describe("Staking", () => {
   });
 
   async function testStakeValues() {
-    const expectedStake: Stake = await stakingContract.stakeBalanceOfSender();
+    const expectedStake: Stake = await stakingContract.snapshotOfSenderStake();
 
     expect(expectedStake.staked).to.equal(actualStake.staked);
     expect(expectedStake.availableReward).to.equal(actualStake.availableReward);
@@ -227,7 +225,7 @@ describe("Staking", () => {
     expect(await stakingContract.rewardFreezePeriod()).to.equal(newRewardFreezePeriod);
   });
 
-  it("Should update reward freeze period", async () => {
+  it("Should update unstake freeze period", async () => {
     const newUnstakeFreezePeriod = 30 * 60; // 30 min
 
     await stakingContract.setUnstakeFreezePeriod(newUnstakeFreezePeriod);
